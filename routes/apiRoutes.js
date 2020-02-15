@@ -25,13 +25,15 @@ module.exports = function (app) {
     });
 
 
-    app.put("api/workouts/:id"), ({ body, params }, res) => {
+    app.put("/api/workouts/:id", ({ body, params }, res) => {
         Workout.findByIdAndUpdate(
             params.id,
-            { $push}
+            { $push: { exercises: body } },
+            { new: true, runValidators: true }
         )
+            .then(data => res.json(data))
+            .catch(err => {
+                console.log("err", err)
+                res.json(err)
+            })
     }
-   
-
-   
-}
